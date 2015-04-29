@@ -18,18 +18,30 @@ public class EntryPoint {
 			return;
 		}
 
-		File nbt = new File(System.getProperty("user.dir") + "\\src\\" + args[0]);
+		File nbt = new File(System.getProperty("user.dir") + "\\" + args[0]);
+		File json = new File(System.getProperty("user.dir") + "\\" + args[1]);
+
+		System.out.println("File to convert : " + nbt.getPath());
+		System.out.println("File to output : " + json.getPath());
+
+		if (!nbt.exists()) {
+			System.out.println("Input file does not exist ! Can't continue");
+			return;
+		}
+
 		NBTInputStream nbtIS = new NBTInputStream(new FileInputStream(nbt));
 
 		Tag tag = nbtIS.readTag();
 		nbtIS.close();
 
-		System.out.println(tag.getName());
+		System.out.println("Converting...");
 		JSONObject jsonObj = NBTParser.parseToJSON(tag);
-		FileWriter fileWriter = new FileWriter(new File(System.getProperty("user.dir") + "\\src\\" + args[1]));
+		FileWriter fileWriter = new FileWriter(json);
 
 		fileWriter.write(jsonObj.toString());
 		fileWriter.close();
+
+		System.out.println("Conversion ended succesfully");
 
 	}
 
